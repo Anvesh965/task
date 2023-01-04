@@ -26,7 +26,7 @@ func fileReader(file string) []string {
 
 }
 
-func LinesWithPattern(pattern string, files []string) []string {
+func LinesWithPattern(pattern string, files []string, isV bool) []string {
 
 	output := []string{}
 
@@ -35,12 +35,15 @@ func LinesWithPattern(pattern string, files []string) []string {
 	for _, file := range files {
 		fileData := fileReader(file)
 		if len(files) > 1 {
-			prefix = file + ":"
+			prefix = file + ": "
 		}
 		for lineNumber, line := range fileData {
 			ans := strings.Contains(line, pattern)
-			if ans {
-				output = append(output, prefix+strconv.Itoa(lineNumber)+":"+line)
+			if ans && !isV {
+				output = append(output, prefix+strconv.Itoa(lineNumber + 1)+":"+line)
+			} else if isV && !ans {
+				output = append(output, prefix+line)
+
 			}
 		}
 	}
@@ -68,12 +71,17 @@ func FilesWithMatching(pattern string, files []string) []string {
 func CaseInSensitiveMatching(pattern string, files []string) []string {
 	output := []string{}
 
+	prefix := ""
+
 	for _, file := range files {
 		fileData := fileReader(file)
+		if len(files) > 1 {
+			prefix = file + ": "
+		}
 		for _, line := range fileData {
 			for _, word := range strings.Split(line, " ") {
 				if strings.EqualFold(word, pattern) {
-					output = append(output, line)
+					output = append(output, prefix+line)
 					break
 				}
 			}
@@ -85,12 +93,15 @@ func CaseInSensitiveMatching(pattern string, files []string) []string {
 
 func FullLineMatching(pattern string, files []string) []string {
 	output := []string{}
-
+	prefix := ""
 	for _, file := range files {
 		fileData := fileReader(file)
+		if len(files) > 1 {
+			prefix = file + ": "
+		}
 		for _, line := range fileData {
 			if strings.EqualFold(line, pattern) {
-				output = append(output, line)
+				output = append(output, prefix+line)
 			}
 		}
 	}

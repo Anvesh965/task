@@ -1,109 +1,102 @@
 package regx
 
 import (
-	"bufio"
-	"os"
-	"strconv"
 	"strings"
 )
 
-func fileReader(file string) []string {
 
-	myFile, _ := os.Open(file)
+	// if ans {
+	// 	if inv {
+	// 		temp[3] = true
+	// 		fileLinesCount[file]--
+	// 	}
+	// } else if !inv {
+	// 	temp[3] = true
+	// 	fileLinesCount[file]--
+	// }
 
-	scanner := bufio.NewScanner(myFile)
-	scanner.Split(bufio.ScanLines)
-
-	defer myFile.Close()
-
-	data := []string{}
-
-	for scanner.Scan() {
-		data = append(data, scanner.Text())
+func update(lineData interface{}, ans bool, inv bool, file string, fileLinesCount map[string]int) {
+	temp := (lineData).([]interface{})
+	if ans {
+		if inv {
+			temp[3] = true
+			fileLinesCount[file]--
+		}
+	} else if !inv {
+		temp[3] = true
+		fileLinesCount[file]--
 	}
-
-	return data
 
 }
 
-func LinesWithPattern(pattern string, files []string, isV bool) []string {
+func LinesWithPattern(pattern string, filesData *[]interface{}, fileLinesCount map[string]int, inv bool) []string {
 
 	output := []string{}
 
-	prefix := ""
-
-	for _, file := range files {
-		fileData := fileReader(file)
-		if len(files) > 1 {
-			prefix = file + ": "
+	for _, lineData := range *filesData {
+		temp := lineData.([]interface{})
+		line, file, isRemoved := temp[0].(string), temp[2].(string), temp[3].(bool)
+		if isRemoved {
+			continue
 		}
-		for lineNumber, line := range fileData {
-			ans := strings.Contains(line, pattern)
-			if ans && !isV {
-				output = append(output, prefix+strconv.Itoa(lineNumber + 1)+":"+line)
-			} else if isV && !ans {
-				output = append(output, prefix+line)
+		ans := strings.Contains(line, pattern)
+		update(lineData, ans, inv, file, fileLinesCount)
 
-			}
-		}
 	}
+
+
 	return output
 
 }
 
-func FilesWithMatching(pattern string, files []string) []string {
+func FilesWithPattern(pattern string, filesData *[]interface{}, fileLinesCount map[string]int, inv bool) []string {
 
 	output := []string{}
-
-	for _, file := range files {
-		fileData := fileReader(file)
-		for _, line := range fileData {
-			if strings.Contains(line, pattern) {
-				output = append(output, file)
-				break
-			}
+	for _, lineData := range *filesData {
+		temp := lineData.([]interface{})
+		line, file, isRemoved := temp[0].(string), temp[2].(string), temp[3].(bool)
+		if isRemoved {
+			continue
 		}
-	}
+		ans := strings.Contains(line, pattern)
+		update(lineData, ans, inv, file, fileLinesCount)
 
-	return output
-}
-
-func CaseInSensitiveMatching(pattern string, files []string) []string {
-	output := []string{}
-
-	prefix := ""
-
-	for _, file := range files {
-		fileData := fileReader(file)
-		if len(files) > 1 {
-			prefix = file + ": "
-		}
-		for _, line := range fileData {
-			for _, word := range strings.Split(line, " ") {
-				if strings.EqualFold(word, pattern) {
-					output = append(output, prefix+line)
-					break
-				}
-			}
-		}
 	}
 
 	return output
 }
 
-func FullLineMatching(pattern string, files []string) []string {
+func CaseInSensitiveMatching(pattern string, filesData *[]interface{}, fileLinesCount map[string]int, inv bool) []string {
 	output := []string{}
-	prefix := ""
-	for _, file := range files {
-		fileData := fileReader(file)
-		if len(files) > 1 {
-			prefix = file + ": "
+	for _, lineData := range *filesData {
+		temp := lineData.([]interface{})
+		line, file, isRemoved := temp[0].(string), temp[2].(string), temp[3].(bool)
+		if isRemoved {
+			continue
 		}
-		for _, line := range fileData {
-			if strings.EqualFold(line, pattern) {
-				output = append(output, prefix+line)
-			}
+
+		line = strings.ToLower(line)
+
+		ans := strings.Contains(line, strings.ToLower(pattern))
+		update(lineData, ans, inv, file, fileLinesCount)
+
+	}
+
+	return output
+}
+
+func FullLineMatching(pattern string, filesData *[]interface{}, fileLinesCount map[string]int, inv bool) []string {
+	output := []string{}
+
+	for _, lineData := range *filesData {
+		temp := lineData.([]interface{})
+		line, file, isRemoved := temp[0].(string), temp[2].(string), temp[3].(bool)
+		if isRemoved {
+			continue
 		}
+		ans := line == pattern
+		update(lineData, ans, inv, file, fileLinesCount)
+
 	}
 
 	return output

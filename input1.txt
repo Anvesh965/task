@@ -1,0 +1,5 @@
+hello world
+Go programming language
+hello
+HELLhello WORLD
+line with hello

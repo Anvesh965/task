@@ -43,27 +43,8 @@ func LinesWithPattern(pattern string, filesData *[]interface{}, fileLinesCount m
 		update(lineData, ans, inv, file, fileLinesCount)
 
 	}
-
-
 	return output
 
-}
-
-func FilesWithPattern(pattern string, filesData *[]interface{}, fileLinesCount map[string]int, inv bool) []string {
-
-	output := []string{}
-	for _, lineData := range *filesData {
-		temp := lineData.([]interface{})
-		line, file, isRemoved := temp[0].(string), temp[2].(string), temp[3].(bool)
-		if isRemoved {
-			continue
-		}
-		ans := strings.Contains(line, pattern)
-		update(lineData, ans, inv, file, fileLinesCount)
-
-	}
-
-	return output
 }
 
 func CaseInSensitiveMatching(pattern string, filesData *[]interface{}, fileLinesCount map[string]int, inv bool) []string {

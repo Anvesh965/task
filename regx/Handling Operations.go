@@ -69,15 +69,15 @@ func formatOutput(filesData *[]interface{}, linesCountInFiles map[string]int, fl
 
 }
 
-func handleFlags(pattern string, flag string, filesData *[]interface{}, linesCountInFilesCount map[string]int, inv bool) []string {
+func handleFlags(pattern string, flag string, filesData *[]interface{}, linesCountInFiles map[string]int, inv bool) []string {
 
 	switch flag {
 	case "-n", "-l":
-		return LinesWithPattern(pattern, filesData, linesCountInFilesCount, inv)
+		return LinesWithPattern(pattern, filesData, linesCountInFiles, inv)
 	case "-i":
-		return CaseInSensitiveMatching(pattern, filesData, linesCountInFilesCount, inv)
+		return CaseInSensitiveMatching(pattern, filesData, linesCountInFiles, inv)
 	case "-x":
-		return FullLineMatching(pattern, filesData, linesCountInFilesCount, inv)
+		return FullLineMatching(pattern, filesData, linesCountInFiles, inv)
 	default:
 		return []string{}
 
@@ -88,16 +88,16 @@ func handleFlags(pattern string, flag string, filesData *[]interface{}, linesCou
 func createStructuredData(files []string) ([]interface{}, map[string]int) {
 
 	eachLine := []interface{}{}
-	linesCountInFilesCount := map[string]int{}
+	linesCountInFiles := map[string]int{}
 
 	for _, file := range files {
-		fileReader(file, &eachLine, linesCountInFilesCount)
+		fileReader(file, &eachLine, linesCountInFiles)
 	}
 
-	return eachLine, linesCountInFilesCount
+	return eachLine, linesCountInFiles
 
 }
-func fileReader(file string, eachLine *[]interface{}, linesCountInFilesCount map[string]int) {
+func fileReader(file string, eachLine *[]interface{}, linesCountInFiles map[string]int) {
 
 	myFile, err := os.Open(file)
 
@@ -115,7 +115,7 @@ func fileReader(file string, eachLine *[]interface{}, linesCountInFilesCount map
 	for scanner.Scan() {
 		line := []interface{}{scanner.Text(), lineNumber, file, false}
 		*eachLine = append(*eachLine, line)
-		linesCountInFilesCount[file] += 1
+		linesCountInFiles[file] += 1
 		lineNumber += 1
 	}
 

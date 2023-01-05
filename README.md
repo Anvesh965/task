@@ -1,4 +1,4 @@
-# How to run after pulling
+# How to run after cloning respository
 
 ## There are two ways to run
 

@@ -10,9 +10,7 @@ import (
 )
 
 func main() {
-
 	args := os.Args
-
 	if len(args) == 1 {
 		getUserInput()
 	} else {
@@ -20,6 +18,7 @@ func main() {
 	}
 	// result := Search("hello", "-x -i", []string{"input1.txt", "input2.txt"})
 	// fmt.Println(result)
+	
 
 }
 func getUserInput() {

@@ -30,6 +30,7 @@ func PerformOperations(pattern string, flags []string, files []string) []string 
 		}
 		handleFlags(pattern, flag, &filesData, linesCountInFiles, flagMap["-v"])
 	}
+
 	return formatOutput(&filesData, linesCountInFiles, flagMap, flagsOrder, files)
 
 }

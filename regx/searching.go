@@ -4,17 +4,6 @@ import (
 	"strings"
 )
 
-
-	// if ans {
-	// 	if inv {
-	// 		temp[3] = true
-	// 		fileLinesCount[file]--
-	// 	}
-	// } else if !inv {
-	// 	temp[3] = true
-	// 	fileLinesCount[file]--
-	// }
-
 func update(lineData interface{}, ans bool, inv bool, file string, fileLinesCount map[string]int) {
 	temp := (lineData).([]interface{})
 	if ans {
